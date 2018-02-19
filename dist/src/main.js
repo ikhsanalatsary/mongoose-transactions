@@ -38,7 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose = require("mongoose");
 var mongooseTransactions_collection_1 = require("./mongooseTransactions.collection");
 /** Class representing a transaction. */
-var Transaction = (function () {
+var Transaction = /** @class */ (function () {
     /**
      * Create a transaction.
      * @param useDb - The boolean parameter allow to use transaction collection on db (default false)
@@ -210,12 +210,13 @@ var Transaction = (function () {
     /**
      * Create the insert transaction and rollback states.
      * @param modelName - The string containing the mongoose model name.
+     * @param schema - The object containing the mongoose schema.
      * @param data - The object containing data to insert into mongoose model.
      * @returns id - The id of the object to insert.
      */
-    Transaction.prototype.insert = function (modelName, data, options) {
+    Transaction.prototype.insert = function (modelName, data, options, schema) {
         if (options === void 0) { options = {}; }
-        var model = mongoose.model(modelName);
+        var model = mongoose.model(modelName, schema);
         if (!data._id) {
             data._id = new mongoose.Types.ObjectId();
         }
@@ -235,13 +236,14 @@ var Transaction = (function () {
     };
     /**
      * Create the findOneAndUpdate transaction and rollback states.
-     * @param modelName - The string containing the mongoose model name.
+     * @param modelName - The string containing the mongoose model name or Mongoose Model.
+     * @param schema - The object containing the mongoose schema.
      * @param findId - The id of the object to update.
      * @param dataObj - The object containing data to update into mongoose model.
      */
-    Transaction.prototype.update = function (modelName, findId, data, options) {
+    Transaction.prototype.update = function (modelName, findId, data, options, schema) {
         if (options === void 0) { options = {}; }
-        var model = mongoose.model(modelName);
+        var model = mongoose.model(modelName, schema);
         var transactionObj = {
             data: data,
             findId: findId,
@@ -257,12 +259,13 @@ var Transaction = (function () {
     };
     /**
      * Create the remove transaction and rollback states.
-     * @param modelName - The string containing the mongoose model name.
+     * @param modelName - The string containing the mongoose model name or Mongoose Model.
+     * @param schema - The object containing the mongoose schema.
      * @param findObj - The object containing data to find mongoose collection.
      */
-    Transaction.prototype.remove = function (modelName, findId, options) {
+    Transaction.prototype.remove = function (modelName, findId, options, schema) {
         if (options === void 0) { options = {}; }
-        var model = mongoose.model(modelName);
+        var model = mongoose.model(modelName, schema);
         var transactionObj = {
             data: null,
             findId: findId,

@@ -159,11 +159,12 @@ export default class Transaction {
     /**
      * Create the insert transaction and rollback states.
      * @param modelName - The string containing the mongoose model name.
+     * @param schema - The object containing the mongoose schema.
      * @param data - The object containing data to insert into mongoose model.
      * @returns id - The id of the object to insert.
      */
-    public insert(modelName, data, options = {}) {
-        const model = mongoose.model(modelName);
+    public insert(modelName, data, options = {}, schema) {
+        const model = mongoose.model(modelName, schema);
 
         if (!data._id) {
             data._id = new mongoose.Types.ObjectId();
@@ -189,12 +190,13 @@ export default class Transaction {
 
     /**
      * Create the findOneAndUpdate transaction and rollback states.
-     * @param modelName - The string containing the mongoose model name.
+     * @param modelName - The string containing the mongoose model name or Mongoose Model.
+     * @param schema - The object containing the mongoose schema.
      * @param findId - The id of the object to update.
      * @param dataObj - The object containing data to update into mongoose model.
      */
-    public update(modelName, findId, data, options = {}) {
-        const model = mongoose.model(modelName);
+    public update(modelName, findId, data, options = {}, schema) {
+        const model = mongoose.model(modelName, schema);
         const transactionObj = {
             data,
             findId,
@@ -213,11 +215,12 @@ export default class Transaction {
 
     /**
      * Create the remove transaction and rollback states.
-     * @param modelName - The string containing the mongoose model name.
+     * @param modelName - The string containing the mongoose model name or Mongoose Model.
+     * @param schema - The object containing the mongoose schema.
      * @param findObj - The object containing data to find mongoose collection.
      */
-    public remove(modelName, findId, options = {}) {
-        const model = mongoose.model(modelName);
+    public remove(modelName, findId, options = {}, schema) {
+        const model = mongoose.model(modelName, schema);
         const transactionObj = {
             data: null,
             findId,
